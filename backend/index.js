@@ -10,6 +10,7 @@ import loopRouter from "./routes/loop.routes.js";
 import storyRouter from "./routes/story.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import { app, server } from "./socket.js";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -35,6 +36,8 @@ app.use("/api/post", postRouter);
 app.use("/api/loop", loopRouter);
 app.use("/api/story", storyRouter);
 app.use("/api/message", messageRouter);
+
+mongoose.set("debug", true); // Enable Mongoose debugging
 
 server.listen(port, async () => {
     try {
