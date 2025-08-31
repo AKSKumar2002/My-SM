@@ -14,11 +14,15 @@ dotenv.config()
 
 const port=process.env.PORT || 5000
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:"https://my-sm-backend.vercel.app/",
     credentials:true
 }))
 app.use(express.json())
 app.use(cookieParser())
+
+app.get("/", (req, res) => {
+    res.send("Welcome to My-SM Backend API");
+});
 
 app.use("/api/auth",authRouter)
 app.use("/api/user",userRouter)
