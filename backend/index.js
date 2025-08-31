@@ -20,6 +20,10 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
+app.get("/", (req, res) => {
+    res.send("Welcome to My-SM Backend API");
+});
+
 app.use("/api/auth",authRouter)
 app.use("/api/user",userRouter)
 app.use("/api/post",postRouter)
