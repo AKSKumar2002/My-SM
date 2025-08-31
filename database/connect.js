@@ -2,10 +2,12 @@ const mongoose = require('mongoose');
 
 const connectDB = async (mongoUri) => {
   try {
+    console.log('Connecting to MongoDB with URI:', mongoUri); // Debugging log
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+      bufferCommands: false, // Disable buffering of commands
     });
 
     mongoose.connection.on('connected', () => {
