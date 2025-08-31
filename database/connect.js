@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
+const connectDB = async (mongoUri) => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds

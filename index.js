@@ -1,5 +1,4 @@
 const connectDB = require('./database/connect');
-// ...existing code...
 
 (async () => {
   try {
