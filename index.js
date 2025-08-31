@@ -14,15 +14,17 @@ app.use(express.json()); // Middleware to parse JSON requests
     await connectDB(mongoUri);
     console.log("Connected to MongoDB");
 
-    // Optional: Add a delay to ensure connection is fully established
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Start the server only after the database connection is established
+    const PORT = process.env.PORT || 8000;
+    app.use('/api/auth', authRoutes); // Register auth routes
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
   } catch (error) {
     console.error('Failed to connect to the database:', error.message);
     process.exit(1); // Exit process with failure
   }
 })();
-
-app.use('/api/auth', authRoutes); // Register auth routes
 
 // Global error-handling middleware
 app.use((err, req, res, next) => {
