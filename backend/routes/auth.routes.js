@@ -5,6 +5,10 @@ const authRouter = express.Router();
 
 authRouter.post("/signup", async (req, res, next) => {
     try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password are required" });
+        }
         console.log("Signup request received:", req.body);
         await signUp(req, res);
     } catch (error) {
