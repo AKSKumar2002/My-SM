@@ -1,16 +1,17 @@
-import express from "express"
-import dotenv from "dotenv"
-import connectDb from "./config/db.js"
-import cookieParser from "cookie-parser"
-import cors from "cors"
-import authRouter from "./routes/auth.routes.js"
-import userRouter from "./routes/user.routes.js"
-import postRouter from "./routes/post.routes.js"
-import loopRouter from "./routes/loop.routes.js"
-import storyRouter from "./routes/story.routes.js"
-import messageRouter from "./routes/message.routes.js"
-import { app, server } from "./socket.js"
-dotenv.config()
+import express from "express";
+import dotenv from "dotenv";
+import connectDb from "./config/db.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import authRouter from "./routes/auth.routes.js";
+import userRouter from "./routes/user.routes.js";
+import postRouter from "./routes/post.routes.js";
+import loopRouter from "./routes/loop.routes.js";
+import storyRouter from "./routes/story.routes.js";
+import messageRouter from "./routes/message.routes.js";
+import { app, server } from "./socket.js";
+
+dotenv.config();
 
 const port = process.env.PORT || 5000;
 

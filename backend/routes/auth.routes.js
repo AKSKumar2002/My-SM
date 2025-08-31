@@ -1,12 +1,17 @@
-import express from "express"
-import { resetPassword, sendOtp, signIn, signOut, signUp, verifyOtp } from "../controllers/auth.controllers.js"
+import express from "express";
+import { resetPassword, sendOtp, signIn, signOut, signUp, verifyOtp } from "../controllers/auth.controllers.js";
 
 const authRouter = express.Router();
 
-authRouter.post("/signup", (req, res, next) => {
-    console.log("Signup request received:", req.body);
-    next();
-}, signUp);
+authRouter.post("/signup", async (req, res, next) => {
+    try {
+        console.log("Signup request received:", req.body);
+        await signUp(req, res);
+    } catch (error) {
+        console.error("Error in signup route:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 authRouter.post("/signin", signIn);
 authRouter.post("/sendOtp", sendOtp);
