@@ -8,6 +8,7 @@ const connectDB = require('./database/connect');
       throw new Error("MONGO_URI is not defined in environment variables.");
     }
     await connectDB(mongoUri);
+    console.log("Connected to MongoDB");
   } catch (error) {
     console.error('Failed to connect to the database:', error.message);
     process.exit(1); // Exit process with failure

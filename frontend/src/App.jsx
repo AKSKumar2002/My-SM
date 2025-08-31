@@ -25,67 +25,64 @@ import Search from './pages/Search'
 import getAllNotifications from './hooks/getAllNotifications'
 import Notifications from './pages/Notifications'
 import { setNotificationData } from './redux/userSlice'
-export const serverUrl = process.env.REACT_APP_SERVER_URL || "https://my-sm-backend.vercel.app"
+export const serverUrl = process.env.REACT_APP_SERVER_URL || "https://my-sm-backend.vercel.app";
+
 function App() {
-   getCurrentUser()
-   getSuggestedUsers()
-   getAllPost()
-   getAllLoops()
-   getAllStories()
-   getFollowingList()
-   getPrevChatUsers()
-   getAllNotifications()
-  const {userData,notificationData}=useSelector(state=>state.user)
-   
-    const {socket}=useSelector(state=>state.socket)
-    const dispatch=useDispatch()
- useEffect(()=>{
-  if(userData){
-    const socketIo=io(`${serverUrl}`,{
-      query:{
-        userId:userData._id
-      }
-    })
-dispatch(setSocket(socketIo))
+    getCurrentUser();
+    getSuggestedUsers();
+    getAllPost();
+    getAllLoops();
+    getAllStories();
+    getFollowingList();
+    getPrevChatUsers();
+    getAllNotifications();
 
+    const { userData, notificationData } = useSelector(state => state.user);
+    const { socket } = useSelector(state => state.socket);
+    const dispatch = useDispatch();
 
-socketIo.on('getOnlineUsers',(users)=>{
-  dispatch(setOnlineUsers(users))
-  console.log(users)
-})
+    useEffect(() => {
+        if (userData) {
+            const socketIo = io(`${serverUrl}`, {
+                query: { userId: userData._id }
+            });
+            dispatch(setSocket(socketIo));
 
+            socketIo.on('getOnlineUsers', (users) => {
+                dispatch(setOnlineUsers(users));
+                console.log(users);
+            });
 
-return ()=>socketIo.close()
-  }else{
-    if(socket){
-      socket.close()
-      dispatch(setSocket(null))
-    }
-  }
- },[userData])
+            return () => socketIo.close();
+        } else {
+            if (socket) {
+                socket.close();
+                dispatch(setSocket(null));
+            }
+        }
+    }, [userData]);
 
+    socket?.on("newNotification", (noti) => {
+        dispatch(setNotificationData([...notificationData, noti]));
+    });
 
-socket?.on("newNotification",(noti)=>{
-  dispatch(setNotificationData([...notificationData,noti]))
-})
-
-  return (
-    <Routes>
-      <Route path='/signup' element={!userData?<SignUp/>:<Navigate to={"/"}/>}/>
-       <Route path='/signin' element={!userData?<SignIn/>:<Navigate to={"/"}/>}/>
-        <Route path='/' element={userData?<Home/>:<Navigate to={"/signin"}/>}/>
-       <Route path='/forgot-password' element={!userData?<ForgotPassword/>:<Navigate to={"/"}/>}/>
-      <Route path='/profile/:userName' element={userData?<Profile/>:<Navigate to={"/signin"}/>}/>
-      <Route path='/story/:userName' element={userData?<Story/>:<Navigate to={"/signin"}/>}/>
-       <Route path='/upload' element={userData?<Upload/>:<Navigate to={"/signin"}/>}/>
-        <Route path='/search' element={userData?<Search/>:<Navigate to={"/signin"}/>}/>
-          <Route path='/editprofile' element={userData?<EditProfile/>:<Navigate to={"/signin"}/>}/>
+    return (
+        <Routes>
+            <Route path='/signup' element={!userData?<SignUp/>:<Navigate to={"/"}/>}/>
+            <Route path='/signin' element={!userData?<SignIn/>:<Navigate to={"/"}/>}/>
+            <Route path='/' element={userData?<Home/>:<Navigate to={"/signin"}/>}/>
+            <Route path='/forgot-password' element={!userData?<ForgotPassword/>:<Navigate to={"/"}/>}/>
+            <Route path='/profile/:userName' element={userData?<Profile/>:<Navigate to={"/signin"}/>}/>
+            <Route path='/story/:userName' element={userData?<Story/>:<Navigate to={"/signin"}/>}/>
+            <Route path='/upload' element={userData?<Upload/>:<Navigate to={"/signin"}/>}/>
+            <Route path='/search' element={userData?<Search/>:<Navigate to={"/signin"}/>}/>
+            <Route path='/editprofile' element={userData?<EditProfile/>:<Navigate to={"/signin"}/>}/>
             <Route path='/messages' element={userData?<Messages/>:<Navigate to={"/signin"}/>}/>
             <Route path='/messageArea' element={userData?<MessageArea/>:<Navigate to={"/signin"}/>}/>
-             <Route path='/notifications' element={userData?<Notifications/>:<Navigate to={"/signin"}/>}/>
-          <Route path='/loops' element={userData?<Loops/>:<Navigate to={"/signin"}/>}/>
-    </Routes>
-  )
+            <Route path='/notifications' element={userData?<Notifications/>:<Navigate to={"/signin"}/>}/>
+            <Route path='/loops' element={userData?<Loops/>:<Navigate to={"/signin"}/>}/>
+        </Routes>
+    );
 }
 
-export default App
+export default App;

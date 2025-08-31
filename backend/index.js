@@ -12,30 +12,36 @@ import messageRouter from "./routes/message.routes.js"
 import { app, server } from "./socket.js"
 dotenv.config()
 
-const port=process.env.PORT || 5000
+const port = process.env.PORT || 5000;
+
 app.use(cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.use(express.json())
-app.use(cookieParser())
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
     res.send("Welcome to My-SM Backend API");
 });
 
-app.use("/api/auth",authRouter)
-app.use("/api/user",userRouter)
-app.use("/api/post",postRouter)
-app.use("/api/loop",loopRouter)
-app.use("/api/story",storyRouter)
-app.use("/api/message",messageRouter)
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+app.use("/api/post", postRouter);
+app.use("/api/loop", loopRouter);
+app.use("/api/story", storyRouter);
+app.use("/api/message", messageRouter);
 
-
-server.listen(port , ()=>{
-    connectDb()
-    console.log("server started")
-})
+server.listen(port, async () => {
+    try {
+        await connectDb();
+        console.log("Connected to MongoDB and server started on port", port);
+    } catch (error) {
+        console.error("Failed to connect to MongoDB:", error.message);
+        process.exit(1);
+    }
+});
 
